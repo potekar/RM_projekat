@@ -1,39 +1,38 @@
 package server;
+
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
-public class Server_main{
-    static ArrayList<MyFile> myFiles = new ArrayList<>();
-    static Set<String> users=new HashSet<>();
-    static BufferedReader userInfo;
-    static PrintWriter notifyUsers;
-    public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(1234);
-        int fileId=0;
+public class ServerUserHandler extends Thread{
 
+    String username;
+    Socket socket;
+    ArrayList<MyFile> myFiles;
 
-        while (true) {
+    PrintWriter sendToUser;
 
-            try {
-                // Wait for a client to connect and when they do create a socket to communicate with them.
-                Socket socket = serverSocket.accept();
-                userInfo=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    public ServerUserHandler(String username, Socket socket, ArrayList<MyFile> myfiles) {
+        this.username = username;
+        this.socket = socket;
+        this.myFiles=myfiles;
+    }
 
-                notifyUsers=new PrintWriter(socket.getOutputStream(),true);
+    public String getUsername() {
+        return username;
+    }
 
-                String username=userInfo.readLine();
-                System.out.println(username+" connected!");
-                users.add(username);
-                notifyUsers.println("djesi hajvanu, trenutno povezanih :" +users.size());
+    public Socket getSocket() {
+        return socket;
+    }
 
+    @Override
+    public void run() {
+        try {
+            DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+            sendToUser =new PrintWriter(socket.getOutputStream(),true);
 
-                // Stream to receive data from the client through the socket.
-                DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-
+            while(true) {
                 // Read the size of the file name so know when to stop reading.
                 int fileNameLength = dataInputStream.readInt();
                 // If the file exists
@@ -55,11 +54,11 @@ public class Server_main{
                         // Panel to hold the picture and file name.
 
                         // Add the new file to the array list which holds all our data.
-                        myFiles.add(new MyFile(fileId, fileName, fileContentBytes, getFileExtension(fileName)));
+                        myFiles.add(new MyFile(ServerMain.getFileId(), fileName, fileContentBytes, getFileExtension(fileName)));
                         // Increment the fileId for the next file to be received.
-                        fileId++;
+                        ServerMain.setFileId(ServerMain.getFileId() + 1);
 
-                        File fileToDownload = new File("RM_grupnjak/src/Database/"+fileName);
+                        File fileToDownload = new File("src/Database/" + fileName);
                         try {
                             // Create a stream to write data to the file.
                             FileOutputStream fileOutputStream = new FileOutputStream(fileToDownload);
@@ -70,22 +69,24 @@ public class Server_main{
                         } catch (IOException ex) {
                             ex.printStackTrace();
                         }
-
-                        for(MyFile f: myFiles)
-                        {
+                        for (MyFile f : myFiles) {
                             System.out.println(f.getName());
                         }
+
+                        ServerMain.sendFileList();
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
+        catch (IOException e)
+        {
+            System.err.println(username+" disconected");
+        }
+
     }
 
-    private void notifyAllusers(String notification)
-    {
-        System.out.println("Sending notification to all users: "+notification);
+    public PrintWriter getSendToUser() {
+        return sendToUser;
     }
 
     private static String getFileExtension(String fileName) {

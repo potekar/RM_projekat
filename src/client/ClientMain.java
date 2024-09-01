@@ -1,28 +1,33 @@
 package client;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import server.MyFile;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
+import java.util.Random;
 
-public class Client_main extends Application {
+public class ClientMain extends Application {
 
     File file;
     Socket socket;
     DataOutputStream dataOutputStream;
     BufferedReader serverReader;
+    Label notifications;
+    ListView<String> fileList;
+
+    Random random=new Random();
 
     public void start(Stage stage)
     {
@@ -32,12 +37,12 @@ public class Client_main extends Application {
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             serverReader=new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter sendUserInfo=new PrintWriter(socket.getOutputStream(),true);
-            sendUserInfo.println("Zvonko");
+            sendUserInfo.println(random.nextInt(1,5000));
 
         } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
+            System.err.println("Server not found");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Server not found");
         }
 
         try {
@@ -47,13 +52,21 @@ public class Client_main extends Application {
 
             Label label = new Label("no files selected");
 
-            Label notifications=new Label(serverReader.readLine());
+            notifications=new Label(serverReader.readLine());
 
             Button btn_open = new Button("Show open dialog");
             Button btn_send=new Button("Send file");
 
-            EventHandler<ActionEvent> openFile =
-                    new EventHandler<>() {
+            fileList =new ListView<>();
+//            String[] split=serverReader.readLine().split(", ");
+//            for(String s:split)
+//            {
+//                s=s.substring(13);
+//                fileList.getItems().add(s);
+//            }
+
+
+            EventHandler<ActionEvent> openFile = new EventHandler<>() {
 
                         public void handle(ActionEvent e) {
 
@@ -68,8 +81,7 @@ public class Client_main extends Application {
                         }
                     };
 
-            EventHandler<ActionEvent> sendFile=
-                    new EventHandler<ActionEvent>() {
+            EventHandler<ActionEvent> sendFile= new EventHandler<ActionEvent>() {
                         public void handle(ActionEvent actionEvent) {
                             if (file!=null)
                             {
@@ -104,7 +116,7 @@ public class Client_main extends Application {
 
             btn_open.setOnAction(openFile);
             btn_send.setOnAction(sendFile);
-            VBox vbox = new VBox(30, notifications,label, btn_open,btn_send);
+            VBox vbox = new VBox(30, fileList,notifications,label, btn_open,btn_send);
 
             vbox.setAlignment(Pos.CENTER);
 
@@ -113,6 +125,9 @@ public class Client_main extends Application {
             stage.setScene(scene);
 
             stage.show();
+
+            ClientTaskHandler cth=new ClientTaskHandler(this,serverReader);
+            cth.start();
         }
 
         catch (Exception e) {
@@ -120,6 +135,30 @@ public class Client_main extends Application {
             System.out.println(e.getMessage());
         }
     }
+
+    public void updateNotification(String notification)
+    {
+            notifications.setText(notification);
+    }
+
+    public void updateFileList(String rawFileList)
+    {
+        try {
+            fileList.getItems().clear();
+            String[] split=rawFileList.split(", ");
+            for(String s:split)
+            {
+                s=s.substring(13);
+                fileList.getItems().add(s);
+            }
+        }
+        catch (RuntimeException e)
+        {
+            System.err.println("empty list");
+        }
+
+    }
+
 
     public static void main(String args[])
     {
