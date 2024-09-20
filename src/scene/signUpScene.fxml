@@ -51,7 +51,7 @@
                                     <Font name="Tahoma Bold" size="24.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="greskaLogin" layoutX="67.0" layoutY="97.0" prefHeight="18.0" prefWidth="178.0" styleClass="greska-labela" stylesheets="/scene/style-scenaPocetna.css" text="     " textFill="#57242d" />
+                              <Label fx:id="lblError" layoutX="67.0" layoutY="97.0" prefHeight="18.0" prefWidth="178.0" styleClass="greska-labela" stylesheets="/scene/style-scenaPocetna.css" text="     " textFill="#57242d" />
                               <Label layoutX="67.0" layoutY="128.0" prefHeight="18.0" prefWidth="116.0" text="Username" textFill="#2f2457">
                                  <font>
                                     <Font name="Tahoma Bold" size="14.0" />
@@ -64,7 +64,7 @@
                                  </font>
                               </Label>
                               <PasswordField fx:id="passwordRF" layoutX="67.0" layoutY="215.0" prefHeight="26.0" prefWidth="178.0" styleClass="login-field" stylesheets="/scene/style-scenaPocetna.css" />
-                              <Button fx:id="btnRegister" layoutX="81.0" layoutY="340.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="150.0" styleClass="novi-nalog-button" stylesheets="/scene/style-scenaPocetna.css" text="Register" textFill="#2f2457">
+                              <Button fx:id="btnRegister" layoutX="81.0" layoutY="340.0" mnemonicParsing="false" onAction="#register" prefHeight="41.0" prefWidth="150.0" styleClass="novi-nalog-button" stylesheets="/scene/style-scenaPocetna.css" text="Register" textFill="#2f2457">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>

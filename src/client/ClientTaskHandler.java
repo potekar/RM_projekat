@@ -7,35 +7,23 @@ import javafx.stage.FileChooser;
 import scene.Controller;
 import server.ServerUserHandler;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.rmi.ServerError;
 
 public class ClientTaskHandler extends Thread{
 
-
-    private Socket socket;
-
-
-
-    public ClientTaskHandler(Socket socket) {
-        this.socket=socket;
-    }
-
-
     @Override
     public void run() {
         try {
-            DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+            DataInputStream dataInputStream=ClientMainManager.getDataInputStream();
             while (true)
             {
                 int messageType=dataInputStream.readInt();
 
                 if(messageType==-69)
                 {
+                    System.out.println("69");
                     int messageLenght=dataInputStream.readInt();
                     byte[] messageBytes = new byte[messageLenght];
                     dataInputStream.readFully(messageBytes, 0, messageBytes.length);
@@ -58,6 +46,7 @@ public class ClientTaskHandler extends Thread{
                 }
                 else
                 {
+                    System.out.println("bytes");
                     int fileNameLength = messageType;
                     if(fileNameLength>0)
                     {

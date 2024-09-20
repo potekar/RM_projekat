@@ -2,6 +2,7 @@ package scene;
 
 import client.ClientMain;
 import client.ClientMainManager;
+import client.ClientTaskHandler;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -22,11 +23,13 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable{
 
     private Scene scene;
+    private Socket socket;
     private static Scene mainScene;
     private Stage stage;
     private File file;
     private FileChooser fil_chooser = new FileChooser();
     private DataOutputStream dataOutputStream;
+    private DataInputStream dataInputStream;
      ClientMain clientMain;
 
 //    ---------------------------FXML---------------------------
@@ -58,22 +61,25 @@ public class Controller implements Initializable{
     private Button btnGoToLogin;
 
     @FXML
-    private Label lblFileName=new Label();
+    private Label lblFileName;
 
     @FXML
-    private Label lblUsername=new Label();
+    private Label lblUsername;
 
     @FXML
     private Label lblUsers;
 
     @FXML
-    private Label lblNotification=new Label();
+    private Label lblNotification;
 
     @FXML
     private Button btnBrowse;
 
     @FXML
     private Button btnSubmit;
+
+    @FXML
+    private Label lblError;
 
     @FXML
     private ListView<String> lvFileList=new ListView<>();
@@ -84,6 +90,81 @@ public class Controller implements Initializable{
 
 //    ---------------------------Methods---------------------------
 
+    public void login(javafx.event.ActionEvent actionEvent) throws IOException {
+        socket = new Socket("localhost", 1234);
+        dataOutputStream = new DataOutputStream(socket.getOutputStream());
+        dataInputStream=new DataInputStream(socket.getInputStream());
+        ClientMainManager.setDataOutputStream(dataOutputStream);
+        ClientMainManager.setDataInputStream(dataInputStream);
+
+        String username=usernameF.getText();
+        String password=passwordF.getText();
+
+        sendMessage("login");
+        sendMessage(username);
+        sendMessage(String.valueOf(password.hashCode()));
+        String res=getMessage();
+        if(res.equals("1"))
+        {
+            switchToMain(actionEvent,username);
+        }
+        else if(res.equals("0")){
+            lblError = (Label) ClientMainManager.getCm().getCurrentStage().getScene().lookup("#lblError");
+            lblError.setText("Wrong username or password");
+
+        }
+    }
+
+    public void sendMessage(String message) throws IOException {
+        dataInputStream=ClientMainManager.getDataInputStream();
+        dataOutputStream.writeInt(-69);
+        byte[] messageBytes = message.getBytes();
+        // Send the length of the name of the file so server knows when to stop reading.
+        dataOutputStream.writeInt(messageBytes.length);
+        // Send the file name.
+        dataOutputStream.write(messageBytes);
+    }
+    public String getMessage() throws IOException {
+        dataInputStream=ClientMainManager.getDataInputStream();
+        int messageType = dataInputStream.readInt();
+        int messageLenght = dataInputStream.readInt();
+        byte[] messageBytes = new byte[messageLenght];
+        dataInputStream.readFully(messageBytes, 0, messageBytes.length);
+        return new String(messageBytes);
+    }
+
+    public void register(javafx.event.ActionEvent actionEvent) throws IOException {
+        socket = new Socket("localhost", 1234);
+        dataOutputStream = new DataOutputStream(socket.getOutputStream());
+        dataInputStream=new DataInputStream(socket.getInputStream());
+        ClientMainManager.setDataOutputStream(dataOutputStream);
+        ClientMainManager.setDataInputStream(dataInputStream);
+
+        String username=usernameRF.getText();
+        String password=passwordRF.getText();
+        String password1=passwordRF1.getText();
+
+        if(password.equals(password1) && password.length()>=4 && username.length()>1)
+        {
+            sendMessage("register");
+            sendMessage(username);
+            sendMessage(String.valueOf(password.hashCode()));
+            String res=getMessage();
+            if(res.equals("1"))
+            {
+                switchToMain(actionEvent,username);
+            }
+            else if(res.equals("0")){
+                lblError = (Label) ClientMainManager.getCm().getCurrentStage().getScene().lookup("#lblError");
+                lblError.setText("User already exists");
+            }
+        }
+        else {
+            lblError = (Label) ClientMainManager.getCm().getCurrentStage().getScene().lookup("#lblError");
+            lblError.setText("Invalid data");
+        }
+
+    }
     private Scene getFxmlScene(String name) {
         try {
             return new Scene(FXMLLoader.load(getClass().getResource(name)));
@@ -92,7 +173,7 @@ public class Controller implements Initializable{
         }
     }
 
-    public void switchToMain(javafx.event.ActionEvent actionEvent) throws IOException {
+    public void switchToMain(javafx.event.ActionEvent actionEvent,String username) throws IOException {
         stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         scene = getFxmlScene("mainScene.fxml");
         mainScene=getFxmlScene("mainScene.fxml");
@@ -100,7 +181,10 @@ public class Controller implements Initializable{
         stage.setScene(scene);
         mainScene=scene;
         clientMain= ClientMainManager.getCm();
-        clientMain.startClient();
+        ClientTaskHandler cth=new ClientTaskHandler();
+        cth.start();
+        lblUsername = (Label) mainScene.lookup("#lblUsername");
+        lblUsername.setText(username);
     }
 
     public void setBtnGoToRegister(javafx.event.ActionEvent actionEvent) throws IOException {
@@ -116,7 +200,6 @@ public class Controller implements Initializable{
         scene.getStylesheets().add(getClass().getResource("/scene/style-scenaPocetna.css").toExternalForm());
         stage.setScene(scene);
     }
-
 
     public void chooseFile()
     {
@@ -136,7 +219,6 @@ public class Controller implements Initializable{
 
     }
 
-
     public void sendFile()
     {
         btnSubmit.setOnAction(new EventHandler<ActionEvent>() {
@@ -145,11 +227,12 @@ public class Controller implements Initializable{
                 if (file!=null)
                 {
                     try {
-                        dataOutputStream=ClientMainManager.getCm().getDataOutputStream();
+                        dataOutputStream=ClientMainManager.getDataOutputStream();
                         // Create an input stream into the file you want to send.
                         FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
                         // Get the name of the file you want to send and store it in filename.
                         String fileName = file.getName();
+                        fileName=fileName.replaceAll(" ","_");
                         // Convert the name of the file into an array of bytes to be sent to the server.
                         byte[] fileNameBytes = fileName.getBytes();
                         // Create a byte array the size of the file so don't send too little or too much data to the server.
@@ -185,7 +268,6 @@ public class Controller implements Initializable{
         lblNotification.setText(notification.substring(1));
     }
 
-
     public void updateFileList(String rawFileList) {
         lvFileList=(ListView<String>) mainScene.lookup("#lvFileList");
         try {
@@ -193,7 +275,6 @@ public class Controller implements Initializable{
             rawFileList=rawFileList.substring(1);
             String[] split = rawFileList.split(", ");
             for (String s : split) {
-                s = s.substring(13);
                 lvFileList.getItems().add(s);
             }
         } catch (RuntimeException e) {
@@ -204,7 +285,6 @@ public class Controller implements Initializable{
     public void downloadFile() throws IOException {
         lvFileList=(ListView<String>) mainScene.lookup("#lvFileList");
 
-
         lvFileList.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -212,10 +292,9 @@ public class Controller implements Initializable{
                 if (mouseEvent.getClickCount() == 2) {
                         String currentItemSelected = lvFileList.getSelectionModel().getSelectedItem().toString();
                     try {
-                        dataOutputStream=ClientMainManager.getCm().getDataOutputStream();
+                        dataOutputStream=ClientMainManager.getDataOutputStream();
                         dataOutputStream.writeInt(-69);
-
-                        byte[] messageBytes = currentItemSelected.getBytes();
+                        byte[] messageBytes = currentItemSelected.split(" ")[0].getBytes();
                         // Send the length of the name of the file so server knows when to stop reading.
                         dataOutputStream.writeInt(messageBytes.length);
                         // Send the file name.
@@ -260,9 +339,30 @@ public class Controller implements Initializable{
         }
     }
 
+    public void setLblError(String error)
+    {
+        lblNotification = (Label) stage.getScene().lookup("#lblError");
+        lblNotification.setText(error);
+    }
+
+    public DataOutputStream getDataOutputStream() {
+        return dataOutputStream;
+    }
+
+    public DataInputStream getDataInputStream() {
+        return dataInputStream;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         stage=ClientMainManager.getCm().getCurrentStage();
-        dataOutputStream=ClientMainManager.getCm().getDataOutputStream();
+//        dataOutputStream=ClientMainManager.getCm().getDataOutputStream();
+//        dataInputStream=ClientMainManager.getCm().getDataInputStream();
+//        socket=ClientMainManager.getCm().getSocket();
+        clientMain=ClientMainManager.getCm();
     }
 }

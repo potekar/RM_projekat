@@ -37,6 +37,7 @@ public class ServerUserHandler extends Thread{
 
             while(true) {
                 int messageType=dataInputStream.readInt();
+                System.out.println("new message");
                 if(messageType==-69)
                 {
                     int messageLenght=dataInputStream.readInt();
@@ -44,8 +45,10 @@ public class ServerUserHandler extends Thread{
                     dataInputStream.readFully(messageBytes, 0, messageBytes.length);
                     String message = new String(messageBytes);
 
+                    System.out.println("user: "+message);
                     for(MyFile file:myFiles)
                     {
+                        System.out.println(file.getName());
                         if(file.getName().equals(message))
                         {
                             System.out.println("User "+username+" requested ->"+ file);
@@ -55,7 +58,6 @@ public class ServerUserHandler extends Thread{
                             dataOutputStream.writeInt(file.getData().length);
                             dataOutputStream.write(file.getData());
                             System.out.println("File sent");
-
                         }
                     }
                 }
@@ -84,6 +86,10 @@ public class ServerUserHandler extends Thread{
                                 dataOutputStream.writeInt(messageBytes.length);
                                 // Send the file name.
                                 dataOutputStream.write(messageBytes);
+
+                                int fa=dataInputStream.readInt();
+                                byte[] fileContentBytess = new byte[fa];
+                                dataInputStream.readFully(fileContentBytess,0,fileContentBytess.length);
                             }
                         }
                         if(!exist)

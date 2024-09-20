@@ -26,7 +26,7 @@
                         <Font name="Tahoma Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="lblUsername" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="47.0" layoutY="262.0" styleClass="labela-lijevo" text="Ime :                     " textAlignment="CENTER" textFill="WHITE">
+                  <Label fx:id="lblUsername" alignment="CENTER" contentDisplay="CENTER" layoutX="55.0" layoutY="262.0" prefHeight="16.0" prefWidth="84.0" styleClass="labela-lijevo" text="Ime" textFill="WHITE">
                      <font>
                         <Font size="13.0" />
                      </font>
