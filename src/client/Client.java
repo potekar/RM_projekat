@@ -1,6 +1,7 @@
 package client;
 
 public class Client {
+
     String username;
     String password;
 
@@ -24,4 +25,7 @@ public class Client {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
+
 }

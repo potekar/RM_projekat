@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" stylesheets="/scene/style-scenaPocetna.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scene.Controller">
+   <children>
+      <VBox prefHeight="650.0" prefWidth="900.0">
+         <children>
+            <HBox prefHeight="50.0" prefWidth="900.0">
+               <children>
+                  <AnchorPane prefHeight="50.0" prefWidth="900.0" styleClass="vrh-pozadina" stylesheets="/scene/style-scenaPocetna.css" />
+               </children>
+            </HBox>
+            <HBox prefHeight="600.0" prefWidth="900.0">
+               <children>
+                  <AnchorPane prefHeight="600.0" prefWidth="500.0" styleClass="lijeva_pozadina" stylesheets="/scene/style-scenaPocetna.css">
+                     <children>
+                        <ImageView fitHeight="402.0" fitWidth="419.0" layoutX="40.0" layoutY="44.0">
+                           <image>
+                              <Image url="@../slike/file.png" />
+                           </image>
+                        </ImageView>
+                        <Button fx:id="btnGoToLogin" layoutX="34.0" layoutY="553.0" mnemonicParsing="false" onAction="#setBtnGoToLogin" prefHeight="30.0" prefWidth="82.0" style="-fx-background-color: rgba(255,255,255,0);" stylesheets="/scene/style-scenaPocetna.css" textAlignment="RIGHT">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Button>
+                        <ImageView fx:id="btnBack" fitHeight="23.0" fitWidth="45.0" layoutX="50.0" layoutY="557.0">
+                           <image>
+                              <Image url="@../slike/return.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="550.0" prefWidth="400.0" styleClass="desna_pozadina" stylesheets="/scene/style-scenaPocetna.css">
+                     <children>
+                        <AnchorPane layoutX="10.0" layoutY="56.0" prefHeight="430.0" prefWidth="320.0" styleClass="login" stylesheets="/scene/style-scenaPocetna.css">
+                           <children>
+                              <Label layoutX="85.0" layoutY="37.0" text="Register" textFill="#2f2457">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="greskaLogin" layoutX="67.0" layoutY="97.0" prefHeight="18.0" prefWidth="178.0" styleClass="greska-labela" stylesheets="/scene/style-scenaPocetna.css" text="     " textFill="#57242d" />
+                              <Label layoutX="67.0" layoutY="128.0" prefHeight="18.0" prefWidth="116.0" text="Username" textFill="#2f2457">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="usernameRF" layoutX="67.0" layoutY="147.0" prefHeight="26.0" prefWidth="178.0" styleClass="login-field" stylesheets="/scene/style-scenaPocetna.css" />
+                              <Label layoutX="67.0" layoutY="185.0" text="Password" textFill="#2f2457">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <PasswordField fx:id="passwordRF" layoutX="67.0" layoutY="215.0" prefHeight="26.0" prefWidth="178.0" styleClass="login-field" stylesheets="/scene/style-scenaPocetna.css" />
+                              <Button fx:id="btnRegister" layoutX="81.0" layoutY="340.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="150.0" styleClass="novi-nalog-button" stylesheets="/scene/style-scenaPocetna.css" text="Register" textFill="#2f2457">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Button>
+                              <Label layoutX="67.0" layoutY="256.0" text="Confirm password" textFill="#2f2457">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <PasswordField fx:id="passwordRF1" layoutX="67.0" layoutY="285.0" prefHeight="26.0" prefWidth="178.0" styleClass="login-field" stylesheets="/scene/style-scenaPocetna.css" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</StackPane>

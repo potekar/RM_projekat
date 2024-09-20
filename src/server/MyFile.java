@@ -53,5 +53,11 @@ public class MyFile {
     public String getFileExtension() {
         return fileExtension;
     }
+
+
+    @Override
+    public String toString() {
+        return "ID: "+getId()+" FILENAME: "+getName();
+    }
 }
 

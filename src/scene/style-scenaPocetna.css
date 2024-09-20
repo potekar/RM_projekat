@@ -1,0 +1,65 @@
+.lijeva_pozadina{
+    -fx-background-color: linear-gradient(rgb(69, 72, 76) 2.8%, rgb(33, 37, 43) 97.8%);
+}
+
+.desna_pozadina{
+    -fx-background-color: linear-gradient(rgb(69, 72, 76) 2.8%, rgb(33, 37, 43) 97.8%);
+    -fx-border-radius: 25px;
+}
+.vrh-pozadina{
+    -fx-background-color: rgb(69, 72, 76);
+}
+
+.login{
+    -fx-background-radius: 15px 50px; /* Zaobljava ivice pozadine */
+    -fx-border-radius: 15px 50px; /* Zaobljava ivice okvira */
+    -fx-border-color: #45484c;
+    -fx-background-color: #eeeffa;
+    
+    
+}
+
+.login-field{
+    -fx-background-color: #eeeffa;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #1f2329;
+}
+
+.login-field:focused{
+    -fx-border-radius: 0px 10px;
+    -fx-border-width: 0 0 1 1;
+    -fx-font-family: "Tahoma";
+    -fx-font-size: 14px;
+}
+
+.prijava-button{
+    -fx-background-color: linear-gradient(rgb(236, 237, 248) 2.8%, rgb(236, 237, 248) 97.8%);
+    -fx-text-fill: #1f2329;
+}
+
+.prijava-button:hover{
+    -fx-cursor: hand;
+    -fx-scale-x: 1.05; /* Povećaj veličinu po X osi za 5% na hoveru */
+    -fx-scale-y: 1.05;
+}
+
+.novi-nalog-button{
+    -fx-background-color: transparent;
+    -fx-text-fill: #1f2329;
+    -fx-font-family: "Tahoma";
+}
+
+.novi-nalog-button:hover{
+    -fx-background-color: transparent;
+    -fx-text-fill: #1f2329;
+    -fx-font-family: "Tahoma";
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-font-size: 16px;
+}
+
+.greska-labela{
+    -fx-font-family: "Tahoma";
+    -fx-text-fill: #57242d;
+    -fx-font-weight: bold;
+}

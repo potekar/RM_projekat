@@ -1,0 +1,106 @@
+.hbox-glavni{
+    -fx-background-color: linear-gradient(rgb(40, 44, 52) 2.8%, rgb(33, 37, 43) 97.8%);
+}
+
+.anchor-pozadina{
+    -fx-background-radius: 15px;
+    -fx-background-color: rgba(124, 122, 122, 0.2);
+   
+}
+
+.labela-lijevo{
+    -fx-font-family: "Tahoma";
+}
+
+.dugme-lijevo{
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-family: "Tahoma";
+    -fx-font-weight: bold;
+}
+
+.dugme-lijevo:hover{
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-font-size: 11px;
+}
+
+.text-areaDodavanje{
+    -fx-background-radius: 10px; 
+    -fx-border-color: transparent;
+    -fx-control-inner-background: rgba(255, 255, 255, 0.697);
+}
+
+.login{
+    -fx-background-radius: 15px 30px; 
+    -fx-border-radius: 15px 30px; 
+    -fx-border-color: transparent;
+    -fx-background-color: #f0f1fc;    
+}
+
+.login-field{
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #21252b;
+}
+
+.login-field:focused{
+    -fx-border-radius: 0px 10px;
+    -fx-border-width: 0 0 1 1;
+    -fx-font-family: "Tahoma";
+    -fx-font-size: 14px;
+}
+
+.prijava-button{
+    -fx-background-radius: 15px; 
+    -fx-border-radius: 30px;
+    -fx-background-color: linear-gradient(rgb(40, 44, 52) 2.8%, rgb(33, 37, 43) 97.8%);
+    -fx-text-fill: #f0f1fc;
+}
+
+.radio-button{
+    -fx-background-radius: 0px 15px 15px 0px; 
+    -fx-border-radius: 30px;
+    -fx-background-color: linear-gradient(rgb(40, 44, 52) 2.8%, rgb(33, 37, 43) 97.8%);
+    -fx-text-fill: #f0f1fc;
+}
+
+.prijava-button:hover{
+    -fx-cursor: hand;
+    -fx-scale-x: 1.05; /* Povećaj veličinu po X osi za 5% na hoveru */
+    -fx-scale-y: 1.05;
+}
+
+.naslov-labela{
+    -fx-font-family: Tahoma;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #21252b;
+}
+
+.forma-labela{
+    -fx-font-family: Tahoma;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #21252b;
+}
+
+.dodaj-labela{
+    -fx-font-family: Tahoma;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #21252b;
+}
+
+.greska-labela{
+    -fx-font-family: "Tahoma";
+    -fx-text-fill: #57242d;
+    -fx-font-weight: bold;
+    
+}
+.red-List-View{
+    -fx-background-color: #323843;
+}
+
+.bijeli-red-List-View{
+    -fx-background-color: #d9d1df;
+}
